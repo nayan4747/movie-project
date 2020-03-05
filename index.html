@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Harry Potter Movies</title>
+  <link rel="icon" href="#" type="image/x-icon">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/mdb.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<style>
+.btnFix{
+    position: fixed;
+    bottom: 0px;
+    right: 0px; 
+}
+.imgView{
+	height: 150px; 
+	width: 30%; 
+	margin-left: auto; 
+	margin-right: auto;
+}
+</style>
+<body>
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+  <a class="navbar-brand" href="#">Movies</a>
+</nav>
+        
+<div id="app-movieList">
+<div class="container mt-4">
+	<div class="row">
+	
+	  <div class="col-lg-3 col-md-6 mb-4" v-for="movie in movies" v-if="movie.Poster != 'N/A'">
+        <div class="card card-cascade narrower card-ecommerce">
+          <div class="view view-cascade overlay">
+            <img :src="movie.Poster" alt="Movie Poster" class="card-img-top">
+          </div>
+          <div class="card-body card-body-cascade text-center pb-3">
+            <h5 class="card-title mb-1">
+              <strong>
+                <a :data-label="movie.Title" onclick="modelMovieDetails(this.getAttribute('data-label'))">{{ movie.Title }}</a>
+              </strong>
+            </h5>
+          </div>
+        </div>
+      </div>
+	</div> 
+  </div>
+</div>
+
+
+<button class="btn btn-outline-info float-right btnFix" data-toggle="modal" data-target="#addNewMovieModel" type="submit" >Add New Movie</button>
+
+
+
+<!--Summary Modal
+<div class="modal fade" id="movieDetailsModel" tabindex="-1" role="dialog" aria-labelledby="movieDetailModal"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" >
+	<div id="app-movieSummery">
+      <div class="modal-header">
+        <h5 class="modal-title" id="movieDetailModal">{{summery.Title}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+	  <div class="view view-cascade overlay ">
+            <img :src="summery.Poster" alt="Movie Poster" class="card-img-top imgView">
+          </div>
+	  <ul class="list-unstyled fa-ul mb-lg-0 mb-5">
+          <li class="d-flex justify-content pl-1">
+            <div>
+              <h6 class="font-weight-bold mb-1">Actors</h5>
+              <p class="text-muted">{{summery.Actors}}</p>
+            </div>
+          </li>
+		  <li class="d-flex justify-content pl-1">
+            <div>
+              <h6 class="font-weight-bold mb-1">Director</h5>
+              <p class="text-muted">{{summery.Director}}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+	  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clearDetails()">Close</button>
+      </div>
+	  </div>
+	</div>
+  </div>
+</div> -->
+
+<!---->
+
+<div class="modal fade" id="movieDetailsModel" tabindex="-1" role="dialog" aria-labelledby="movieDetailModal"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" >
+      <div class="modal-header">
+        <h5 class="modal-title" id="movieDetailTitle"><span id="movieDtlsTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+	  <div class="view view-cascade overlay ">
+            <img id="movieDtlsPoster" alt="Movie Poster" class="card-img-top imgView">
+          </div>
+	  <ul class="list-unstyled fa-ul mb-lg-0 mb-5">
+          <li class="d-flex justify-content pl-1">
+            <div>
+              <h6 class="font-weight-bold mb-1">Actors</h5>
+              <p class="text-muted" id="movieDtlsActorName"></p>
+            </div>
+          </li>
+		  <li class="d-flex justify-content pl-1">
+            <div>
+              <h6 class="font-weight-bold mb-1">Director</h5>
+              <p class="text-muted" id="movieDtlsDirector"></p>
+            </div>
+          </li>
+		   <li class="d-flex justify-content pl-1">
+            <div>
+              <h6 class="font-weight-bold mb-1">Released</h5>
+              <p class="text-muted" id="movieDtlsReleased"></p>
+            </div>
+          </li>
+		   <li class="d-flex justify-content pl-1">
+            <div>
+              <h6 class="font-weight-bold mb-1">Genre</h5>
+              <p class="text-muted" id="movieDtlsGenre"></p>
+            </div>
+          </li>
+		   <li class="d-flex justify-content pl-1">
+            <div>
+              <h6 class="font-weight-bold mb-1">Language</h5>
+              <p class="text-muted" id="movieDtlsLanguage"></p>
+            </div>
+          </li>
+		  <li class="d-flex justify-content pl-1">
+            <div>
+              <h6 class="font-weight-bold mb-1">BoxOffice</h5>
+              <p class="text-muted" id="movieDtlsBoxOffice"></p>
+            </div>
+          </li>
+		  <li class="d-flex justify-content pl-1">
+            <div>
+              <h6 class="font-weight-bold mb-1">Production</h5>
+              <p class="text-muted" id="movieDtlsProduction"></p>
+            </div>
+          </li>
+        </ul>
+      </div>
+	  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clearDetails()">Close</button>
+      </div>
+	  </div>
+	</div>
+  </div>
+</div> 
+
+
+<!--Add Movie -->
+
+<div class="modal fade" id="addNewMovieModel" tabindex="-1" role="dialog" aria-labelledby="addMovieModal"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addMovieModal">Add New Movie</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+	  <div id="app">
+	 <div class="md-form form-sm">
+  <input type="text" id="inptPoster" class="form-control form-control-sm" v-model="autoPoster">
+  <label for="inptPoster">Poster Url</label>
+  </div>
+  <div class="md-form form-sm">
+   <input type="text" id="inptTitle" class="form-control form-control-sm" v-model="autoTitle">
+  <label for="inptTitle">Title</label>
+  </div>
+  <div class="md-form form-sm">
+   <input type="text" id="inptReleased" class="form-control form-control-sm" v-model="autoReleased">
+  <label for="inptReleased">Released</label>
+  </div>
+   <div class="md-form form-sm">
+   <input type="text" id="inptActors" class="form-control form-control-sm" v-model="autoActors">
+  <label for="inptActors">Actors</label>
+  </div>
+  <div class="md-form form-sm">
+   <input type="text" id="inptActorName" class="form-control form-control-sm" v-model="autoDirector">
+  <label for="inptDirector">Director Names</label>
+</div>
+
+<div class="md-form form-sm">
+   <input type="text" id="inptLanguage" class="form-control form-control-sm" v-model="autoLanguage">
+  <label for="inptLanguage">Language</label>
+</div>
+
+
+<hr/>
+<center>
+	<img :src="autoPoster" alt="Movie Poster" class="card-img-top imgView">
+	<p><b>Title</b> - {{ autoTitle }}</p>
+	<p><b>Released</b> - {{ autoReleased }}</p>
+	<p><b>Actors</b> - {{ autoActors }}</p>
+	<p><b>Directors</b> - {{ autoDirector }}</p>
+	<p><b>Language</b> - {{ autoLanguage }}</p>
+
+ 
+ <center>
+ 
+	  <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0">Submit</button>
+      </div>
+     </div>
+	</div>
+  </div>
+</div>
+
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+   
+  <script>
+  
+ var movieList = null;
+ 
+  // GET request for remote image
+axios({
+  method: 'get',
+  url: 'http://www.omdbapi.com/?s=harry potter&apikey=e0620bd4&page=1&type=movie&Content-Type=application/json'
+})
+  .then(function (response) {
+    console.log(response.data.Search);
+	
+	movieList = response.data.Search;
+	
+	var movieListApp = new Vue({
+		el: '#app-movieList',
+		data: {
+			movies: movieList
+		}
+	})
+  }).catch(function (error) {
+    console.log(error);
+  });
+  
+	var movieSummeryApp;
+  
+	function modelMovieDetails(movieTitle){
+		console.log("# "+movieTitle)
+
+		axios({
+		  method: 'get',
+		  url: 'http://www.omdbapi.com/?t='+movieTitle+'&apikey=e0620bd4&Content-Type=application/json'
+		  
+		}).then(function (response) {
+			console.log(response.data);
+			
+			var movieDetails = response.data;
+			
+			/*var movieSummeryApp = new Vue({
+				el: '#app-movieSummery',
+				data: {
+					summery: movieDetails
+				}
+			})*/
+			
+				$("#movieDtlsTitle").text(movieDetails.Title);
+				$("#movieDtlsPoster").attr("src",movieDetails.Poster);
+				$("#movieDtlsActorName").text(movieDetails.Actors);
+				$("#movieDtlsDirector").text(movieDetails.Director);
+				$("#movieDtlsReleased").text(movieDetails.Released);
+				$("#movieDtlsGenre").text(movieDetails.Genre);
+				$("#movieDtlsLanguage").text(movieDetails.Language);
+				$("#movieDtlsBoxOffice").text(movieDetails.BoxOffice);
+				$("#movieDtlsProduction").text(movieDetails.Production);
+
+			console.log("end");
+		  }).catch(function (error) {
+			console.log(error);
+			return false;
+		  });
+		  
+		  $("#movieDetailsModel").modal("show");
+	}
+	
+	function clearDetails(){
+		console.log("clearDetails");
+			
+		movieDetails = null;
+
+		$("#movieDetailsModel").modal("hide");
+	}
+	
+	myObject = new Vue({
+		el: '#app',
+		data: {
+			autoTitle: '',
+			autoReleased: '',
+			autoActors: '',
+			autoPoster: '',
+			autoDirector: '',
+			autoLanguage: ''
+			
+		}
+	})
+
+  </script>
+
+</body>
+</html>
